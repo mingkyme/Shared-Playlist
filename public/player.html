@@ -10,12 +10,12 @@
 
 <body>
     <audio autoplay controls id="aud">
-        <source src="/audio" type="audio/mpeg">
+        <!-- <source src="/audio" type="audio/mpeg"> -->
     </audio>
 </body>
 <script>
     var aud = document.getElementById('aud');
-    var isDone = true;
+    var isFirst = true;
     function playNext(){
         var xhr = new XMLHttpRequest();
             xhr.open("GET", "/api/song-list");
@@ -23,9 +23,9 @@
                 if(xhr.readyState === XMLHttpRequest.DONE) {
                     var status = xhr.status;
                     if (status == 200) {
-                        console.log("A");
                         var list = JSON.parse(xhr.responseText);
-                        if(list.length > 0 && isDone){
+                        if(list.length > 0 && (aud.ended || isFirst)){
+                            isFirst = false;
                             aud.src = "/audio";
                             aud.play();
                         }
@@ -34,7 +34,8 @@
             }
             xhr.send();
     }
-    setInterval(playNext,10000);
+    playNext();
+    setInterval(playNext,3000);
 </script>
 
 </html>
