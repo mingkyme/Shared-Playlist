@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shared Playlist Player</title>
+</head>
+
+<body>
+    <audio autoplay controls id="aud">
+        <source src="/audio" type="audio/mpeg">
+    </audio>
+</body>
+<script>
+    var aud = document.getElementById('aud');
+    var isDone = true;
+    function playNext(){
+        var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/api/song-list");
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === XMLHttpRequest.DONE) {
+                    var status = xhr.status;
+                    if (status == 200) {
+                        console.log("A");
+                        var list = JSON.parse(xhr.responseText);
+                        if(list.length > 0 && isDone){
+                            aud.src = "/audio";
+                            aud.play();
+                        }
+                    }
+                  }
+            }
+            xhr.send();
+    }
+    setInterval(playNext,10000);
+</script>
+
+</html>
