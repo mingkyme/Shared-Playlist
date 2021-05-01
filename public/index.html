@@ -14,9 +14,19 @@
             params.url = url;
             xhr.open("POST", "/api/add-song");
             xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        alert("추가 성공");
+                    }else{
+                        alert("추가 실패");
+                    }
+                document.getElementById('url').value = "";
+                }
+                
+            };
             xhr.send(JSON.stringify(params));
-            alert("추가 성공");
-            document.getElementById('url').value = "";
+            
         }
     </script>
 </head>
