@@ -17,9 +17,12 @@
                 audio.src = "/music?index="+playIndex;
                 audio.onloadeddata = function(){
                     audio.play();
+                    document.getElementById('can-play').textContent = "";
                 }
             }
             audio.onerror = function(){
+                document.getElementById('can-play').textContent = "다음 곡이 존재하지 않습니다.";
+                
                     setTimeout(() => {
                        audio.load(); 
                     }, 1000);
@@ -33,7 +36,7 @@
                     var timeDiff = endTime - startTime; //in ms
                     // strip the ms
                     timeDiff /= 1000;
-                    console.log(timeDiff);
+                    console.log("Load Time: "+timeDiff);
                     var seconds = Math.round(timeDiff);
 
                     audio.currentTime = time+seconds;
@@ -46,11 +49,12 @@
             });
 
             document.getElementById('play-button').onclick = function(){
+                document.getElementById('play-button').textContent = "Sync";
                 socket.emit('init');
             }
             setInterval(() => {
                 document.getElementById('play-state').textContent = playIndex + "번째 음악 " + audio.currentTime + "초 재생 중";
-            }, 1000);
+            }, 100);
         }
     </script>
 </head>
@@ -61,6 +65,7 @@
     <button id="play-button" onclick="javascript:play();">Play</button>
     <h2 id="text"></h2>
     <p id="play-state"></p>
+    <p id="can-play"></p>
 </body>
 
 </html>
