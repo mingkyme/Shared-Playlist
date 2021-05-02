@@ -1,41 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shared Playlist Player</title>
+    <meta charset="utf-8">
+    <title>Player</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        onload = function () {
+            var context = new AudioContext();
+
+            var socket = io();
+            var audio = document.getElementById('audio');
+            var playIndex = 0;
+            audio.onended = function(){
+                playIndex++;
+                audio.src = "/music?index="+playIndex;
+                audio.onloadeddata = function(){
+                    audio.play();
+                }
+            }
+            audio.onerror = function(){
+                    setTimeout(() => {
+                       audio.load(); 
+                    }, 1000);
+                }
+            socket.on('init', function (index,time) {
+                var startTime = new Date();
+                playIndex = index;
+                audio.src = "/music?index="+playIndex;
+                audio.onloadeddata = function(){
+                    var endTime = new Date();
+                    var timeDiff = endTime - startTime; //in ms
+                    // strip the ms
+                    timeDiff /= 1000;
+                    console.log(timeDiff);
+                    var seconds = Math.round(timeDiff);
+
+                    audio.currentTime = time+seconds;
+                    audio.play();
+                }
+            });
+            socket.on('request', function () {
+                document.getElementById('text').textContent = "YOU'RE ADMIN";
+                socket.emit('current-track',playIndex, audio.currentTime);
+            });
+
+            document.getElementById('play-button').onclick = function(){
+                socket.emit('init');
+            }
+            setInterval(() => {
+                document.getElementById('play-state').textContent = playIndex + "번째 음악 " + audio.currentTime + "초 재생 중";
+            }, 1000);
+        }
+    </script>
 </head>
 
 <body>
-    <audio autoplay controls id="aud">
-        <!-- <source src="/audio" type="audio/mpeg"> -->
-    </audio>
+    <!-- <iframe allow="autoplay" id="audio"> -->
+    <audio id="audio" hidden></audio>
+    <button id="play-button" onclick="javascript:play();">Play</button>
+    <h2 id="text"></h2>
+    <p id="play-state"></p>
 </body>
-<script>
-    var aud = document.getElementById('aud');
-    var isFirst = true;
-    function playNext(){
-        var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/api/song-list");
-            xhr.onreadystatechange = function(){
-                if(xhr.readyState === XMLHttpRequest.DONE) {
-                    var status = xhr.status;
-                    if (status == 200) {
-                        var list = JSON.parse(xhr.responseText);
-                        if(list.length > 0 && (aud.ended || isFirst)){
-                            isFirst = false;
-                            aud.src = "/audio";
-                            aud.play();
-                        }
-                    }
-                  }
-            }
-            xhr.send();
-    }
-    playNext();
-    setInterval(playNext,3000);
-</script>
 
 </html>

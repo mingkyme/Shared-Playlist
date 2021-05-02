@@ -12,7 +12,7 @@
             var params = new Object();
             var url = document.getElementById('url').value;
             params.url = url;
-            xhr.open("POST", "/api/add-song");
+            xhr.open("POST", "/api/song");
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function(){
                 if(xhr.readyState == 4){

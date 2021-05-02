@@ -1,7 +1,6 @@
 {
-  "name": "all-playlist",
+  "name": "shared-playlist",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +10,17 @@
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
+    "socket.io": "^4.0.1",
     "youtube-audio-stream": "^0.3.7",
     "ytdl-core": "^4.5.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mingkyme/Shared-Playlist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mingkyme/Shared-Playlist/issues"
+  },
+  "homepage": "https://github.com/mingkyme/Shared-Playlist#readme",
+  "description": ""
 }
