@@ -69,3 +69,6 @@ app.post('/api/song',function(req,res){
         res.sendStatus(500);
     }
 });
+app.get('/api/song',function(req,res){
+    res.send(playlist);
+});
