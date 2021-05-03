@@ -45,6 +45,7 @@
             });
             socket.on('request', function () {
                 document.getElementById('text').textContent = "YOU'RE ADMIN";
+                document.getElementById('admin-tool').hidden = false;
                 socket.emit('current-track',playIndex, audio.currentTime);
             });
 
@@ -86,8 +87,10 @@
     <audio id="audio" hidden></audio>
     <button id="play-button">Play</button>
     <br>
-    <button id="pre">pre</button>
-    <button id="next">next</button>
+    <div id="admin-tool" hidden>
+        <button id="pre">pre</button>
+        <button id="next">next</button>
+    </div>
     <h2 id="text"></h2>
     <p id="play-state"></p>
     <p id="can-play"></p>
