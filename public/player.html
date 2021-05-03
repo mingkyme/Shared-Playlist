@@ -55,6 +55,28 @@
             setInterval(() => {
                 document.getElementById('play-state').textContent = playIndex + "번째 음악 " + audio.currentTime + "초 재생 중";
             }, 100);
+            var pre = document.getElementById('pre');
+            var next = document.getElementById('next');
+            pre.onclick = function(){
+                if(playIndex> 0){
+                    playIndex--;
+                    audio.src = "/music?index="+playIndex;
+                    audio.onloadeddata = function(){
+                        audio.play();
+                        document.getElementById('can-play').textContent = "";
+                    }
+                    socket.emit('pre');
+                }
+            }
+            next.onclick = function(){
+                playIndex++;
+                audio.src = "/music?index="+playIndex;
+                audio.onloadeddata = function(){
+                    audio.play();
+                    document.getElementById('can-play').textContent = "";
+                }
+                socket.emit('next');
+            }
         }
     </script>
 </head>
@@ -62,7 +84,10 @@
 <body>
     <!-- <iframe allow="autoplay" id="audio"> -->
     <audio id="audio" hidden></audio>
-    <button id="play-button" onclick="javascript:play();">Play</button>
+    <button id="play-button">Play</button>
+    <br>
+    <button id="pre">pre</button>
+    <button id="next">next</button>
     <h2 id="text"></h2>
     <p id="play-state"></p>
     <p id="can-play"></p>

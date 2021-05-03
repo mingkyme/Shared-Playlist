@@ -25,6 +25,20 @@ io.on('connect',function(socket){
         playIndex = index;
         playTime = time;
     });
+    socket.on('pre',function(){
+        if(users[0]){
+            setTimeout(function(){
+                socket.broadcast.emit('init',playIndex,playTime);
+            },300);
+        }
+    });
+    socket.on('next',function(){
+        if(users[0]){
+            setTimeout(function(){
+                socket.broadcast.emit('init',playIndex,playTime);
+            },300);
+        }
+    });
     socket.on('disconnect',function(){
         users.splice(users.findIndex(x => x == socket),1);
     });
